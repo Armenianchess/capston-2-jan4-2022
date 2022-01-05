@@ -1,0 +1,59 @@
+{% extends 'users/detail.html' %} {% block user_details %}
+<div class="col-sm-6">
+    <ul class="list-group" id="messages">
+
+        {% for message in messages %}
+
+        <li class="list-group-item">
+
+            <a href="/users/{{ user.id }}">
+                <img src="{{ user.image_url }}" alt="user image" class="timeline-image">
+            </a>
+
+            <div class="message-area">
+                <a href="/users/{{ user.id }}">@{{ user.username }}</a>
+                <span class="text-muted">{{ message.timestamp.strftime('%d %B %Y') }}</span>
+                <p>{{ message.text }}</p>
+
+                <hr>
+                <form method="post" action="/comments/{{g.user.id}}/{{message.id}}">
+                    <hr> {% for comments in message.id|get_comments %}
+                    <p>{{comments.comment}}</p>
+                    {% endfor %}
+                    <div class="mb-3">
+                        <textarea name="comment" placeholder="Your comment" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <button class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+
+            {% if g.user.id != message.user_id %}
+            <form method="POST" action="/messages/{{ message.id }}/like" class="messages-like">
+                <button class="
+              btn
+              btn-sm
+              {{'btn-primary' if message.id in likes else 'btn-secondary'}}">
+              <i class="fa fa-thumbs-up"></i>
+            </button>
+
+            </form>
+
+            {% endif %}
+
+
+        </li>
+
+        {% endfor %}
+
+
+
+    </ul>
+
+
+
+</div>
+
+
+
+{% endblock %}
